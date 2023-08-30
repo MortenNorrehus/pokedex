@@ -1,0 +1,60 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "Kanji";
+  src: url("./kanji.woff2") format("woff2");
+}
+
+body {
+  font-family: "Inter";
+  font-weight: 300;
+}
+
+/**
+* SWIPER SLIDER
+*/
+
+.vertical-pagination {
+  right: 30px;
+  position: absolute;
+  z-index: 99999999;
+  top: 50%;
+  transform: translate(0%, -50%);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  text-align: right;
+  color: #a6a4a4;
+  height: 100% !important;
+  max-height: 250px;
+}
+
+.vertical-pagination .swiper {
+  height: 100%;
+}
+
+.swiper-pagination-bullet {
+  height: 20px;
+  display: block;
+  margin-block: 10px;
+  color: #a6a4a4;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.swiper-pagination-bullet-active,
+.swiper-slide-thumb-active,
+.swiper-pagination-bullet:hover {
+  color: #fff;
+  font-size: 1.5rem;
+}
+
+.horizontal-pagination {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 99;
+}
