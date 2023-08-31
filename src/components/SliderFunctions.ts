@@ -37,3 +37,17 @@ export const addButtons = (ids) => {
   verticalSlider?.append(buttonNext);
   verticalSlider?.prepend(buttonPrev);
 };
+
+export const activeSlide = (range) => {
+  const horizontalSlider = document.querySelector(".horizontal-pagination");
+  console.log("changed");
+  console.log(horizontalSlider);
+
+  horizontalSlider?.querySelectorAll("[data-index]").forEach((item) => {
+    item.classList.remove("current-active");
+  });
+
+  horizontalSlider
+    ?.querySelector(`[data-index="${range}"]`)
+    ?.classList.add("current-active");
+};

@@ -1,6 +1,7 @@
-import { useState } from "react";
-import { Controller } from "swiper/modules";
-import { Swiper, SwiperSlide } from "swiper/react";
+import { useState, useEffect } from "react";
+import { ChevronLeft } from "react-feather";
+import { Controller, Navigation } from "swiper/modules";
+import { Swiper, SwiperSlide, useSwiper } from "swiper/react";
 
 export const HorizontalPagination = ({
   setInitialSlide,
@@ -8,7 +9,28 @@ export const HorizontalPagination = ({
   setActiveBullet,
   handlePaginate,
   setPaginate,
+  activeSlide,
 }) => {
+  const swiper = useSwiper();
+
+  useEffect(() => {
+    const keyDownHandler = (event) => {
+      if (event.key == "ArrowRight") {
+        swiper.slideNext();
+      }
+
+      if (event.key == "ArrowLeft") {
+        swiper.slidePrev();
+      }
+    };
+
+    document.addEventListener("keydown", keyDownHandler);
+
+    return () => {
+      document.removeEventListener("keydown", keyDownHandler);
+    };
+  }, []);
+
   const divide = () => {
     const number = 150;
     const array = [];
@@ -31,25 +53,39 @@ export const HorizontalPagination = ({
   const numbers = divide();
 
   return (
-    <Swiper
-      modules={[Controller]}
-      watchSlidesProgress
-      slidesPerView={numbers.length}
-      className="horizontal-pagination"
-    >
-      {numbers.map((number) => {
-        return (
-          <SwiperSlide
-            key={number.start}
-            onClick={() => {
-              const slider = document.querySelector(".MORTEN").swiper;
-              slider.slideTo(number.start - 1);
-            }}
-          >
-            {number.range}
-          </SwiperSlide>
-        );
-      })}
-    </Swiper>
+    <>
+      <button
+        onClick={() => {
+          swiper.slidePrev();
+          setActiveBullet(swiper.activeIndex);
+        }}
+      >
+        <ChevronLeft />
+      </button>
+      <Swiper
+        navigation
+        modules={[Controller, Navigation]}
+        watchSlidesProgress
+        slidesPerView={8}
+        className="horizontal-pagination"
+      >
+        {numbers.map((number, index) => {
+          return (
+            <SwiperSlide
+              className={number.start == 1 ? "current-active" : ""}
+              data-index={index}
+              key={number.start}
+              onClick={() => {
+                const slider = document.querySelector(".MORTEN").swiper;
+                slider.slideTo(number.start - 1, 2000);
+                activeSlide(index);
+              }}
+            >
+              {number.range}
+            </SwiperSlide>
+          );
+        })}
+      </Swiper>
+    </>
   );
 };

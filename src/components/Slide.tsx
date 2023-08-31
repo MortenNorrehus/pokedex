@@ -47,7 +47,7 @@ export const Slide = ({ id }) => {
     kanji: kanjiColors[result.data.types[0].type.name],
   };
 
-  document.querySelector("body").style.backgroundColor = pokemon.color;
+  //document.querySelector("body").style.backgroundColor = pokemon.color;
 
   return (
     <div

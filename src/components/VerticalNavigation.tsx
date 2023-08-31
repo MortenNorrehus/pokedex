@@ -14,6 +14,7 @@ export const VerticalNavigation = ({
     const keyDownHandler = (event) => {
       if (event.key == "ArrowDown") {
         swiper.slideNext();
+        setActiveBullet(swiper.activeIndex);
 
         if (swiper.activeIndex == allIds.length - 1) {
           setActiveBullet(swiper.activeIndex);
@@ -22,7 +23,7 @@ export const VerticalNavigation = ({
 
       if (event.key == "ArrowUp") {
         swiper.slidePrev();
-
+        setActiveBullet(swiper.activeIndex);
         if (swiper.activeIndex == 0) {
           setActiveBullet(0);
         }
@@ -34,10 +35,10 @@ export const VerticalNavigation = ({
     return () => {
       document.removeEventListener("keydown", keyDownHandler);
     };
-  }, [allIds]);
+  }, []);
 
   return (
-    <div className="absolute top-1/2 right-10 z-10">
+    <div className="absolute top-1/2 right-10 z-10 transform -translate-x-1/2 -translate-y-1/2">
       <button
         onClick={() => {
           swiper.slidePrev();
@@ -53,6 +54,7 @@ export const VerticalNavigation = ({
         slidesPerGroup={10}
         modules={[Thumbs]}
         watchSlidesProgress
+        speed={2000}
         onSwiper={setThumbsSwiper}
         className="max-h-[300px]"
       >
@@ -60,7 +62,7 @@ export const VerticalNavigation = ({
           return (
             <SwiperSlide
               key={id}
-              className="h-full"
+              className="h-full hover:text-white hover:text-xl transform transition-all duration-150 cursor-pointer"
               onClick={() => {
                 setActiveBullet(index);
               }}

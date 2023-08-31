@@ -15,6 +15,7 @@ import { useState } from "react";
 import { HorizontalPagination } from "./HorizontalPagination";
 import { fillIds } from "./SliderFunctions";
 import { VerticalNavigation } from "./VerticalNavigation";
+import { activeSlide } from "./SliderFunctions";
 
 const SlidesPerPage = 10;
 const maxPokemons = 500;
@@ -24,12 +25,11 @@ export const Slider = () => {
   const [ids, setIds] = useState(fillIds(SlidesPerPage, initalSlide));
   const [slides, setSlides] = useState();
 
-  const [activeBullet, setActiveBullet] = useState(1);
+  const [activeBullet, setActiveBullet] = useState(0);
   const [paginate, setPaginate] = useState(1);
-  const [direction, setDirection] = useState();
 
   useEffect(() => {
-    if (activeBullet == ids.length - 1) {
+    /* if (activeBullet == ids.length - 1) {
       setInitialSlide((prev: number) => prev + SlidesPerPage);
       updateSlider();
       return;
@@ -39,7 +39,10 @@ export const Slider = () => {
       setInitialSlide((prev: number) => prev - SlidesPerPage);
       updateSlider();
       return;
-    }
+    }*/
+
+    const range = Math.floor(activeBullet / 10);
+    activeSlide(range);
   }, [activeBullet]);
 
   const handlePaginate = () => {
@@ -138,7 +141,11 @@ export const Slider = () => {
     >
       {slides}
 
-      <VerticalNavigation allIds={ids} setThumbsSwiper={setThumbsSwiper} />
+      <VerticalNavigation
+        allIds={ids}
+        setThumbsSwiper={setThumbsSwiper}
+        setActiveBullet={setActiveBullet}
+      />
 
       <HorizontalPagination
         setInitialSlide={setInitialSlide}
@@ -146,6 +153,7 @@ export const Slider = () => {
         setActiveBullet={setActiveBullet}
         handlePaginate={handlePaginate}
         setPaginate={setPaginate}
+        activeSlide={activeSlide}
       />
     </Swiper>
   );
