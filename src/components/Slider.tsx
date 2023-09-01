@@ -1,160 +1,56 @@
 import { Slide } from "./Slide";
-import { Swiper, SwiperSlide, useSwiper } from "swiper/react";
+import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/effect-fade";
-import { useEffect } from "react";
-import {
-  EffectFade,
-  Navigation,
-  Pagination,
-  Controller,
-  Thumbs,
-} from "swiper/modules";
-import { useState } from "react";
+import { Thumbs } from "swiper/modules";
+import { useState, createContext } from "react";
 import { HorizontalPagination } from "./HorizontalPagination";
 import { fillIds } from "./SliderFunctions";
 import { VerticalNavigation } from "./VerticalNavigation";
-import { activeSlide } from "./SliderFunctions";
 
 const SlidesPerPage = 10;
-const maxPokemons = 500;
+const initalSlide = 1;
+
+export const SwiperContext = createContext(0);
 
 export const Slider = () => {
-  const [initalSlide, setInitialSlide] = useState(1);
-  const [ids, setIds] = useState(fillIds(SlidesPerPage, initalSlide));
-  const [slides, setSlides] = useState();
+  const ids = fillIds(SlidesPerPage, initalSlide);
+  const [activeBullet, setActiveBullet] = useState<number>(0);
 
-  const [activeBullet, setActiveBullet] = useState(0);
-  const [paginate, setPaginate] = useState(1);
-
-  useEffect(() => {
-    /* if (activeBullet == ids.length - 1) {
-      setInitialSlide((prev: number) => prev + SlidesPerPage);
-      updateSlider();
-      return;
-    }
-
-    if (activeBullet % ids.length == 2) {
-      setInitialSlide((prev: number) => prev - SlidesPerPage);
-      updateSlider();
-      return;
-    }*/
-
-    const range = Math.floor(activeBullet / 10);
-    activeSlide(range);
-  }, [activeBullet]);
-
-  const handlePaginate = () => {
-    const slider = document.querySelector(".MORTEN").swiper;
-    paginateSlider();
-    slider.update();
-    slider.slideTo(0);
-  };
-
-  useEffect(() => {
-    const mySlides = ids.map((id) => {
-      return (
-        <SwiperSlide className={id} key={id}>
-          <Slide id={id} key={id} />
-        </SwiperSlide>
-      );
-    });
-    setSlides(mySlides);
-    //updateSlider();
-  }, []);
-
-  const loadSlides = () => {
-    console.log("fsgsfghs");
-    const nextIds = fillIds(SlidesPerPage, maxPokemons - SlidesPerPage);
-
-    const prevSlides = maxPokemons - SlidesPerPage;
-    const prevIds = fillIds(SlidesPerPage, prevSlides);
-
-    const allIds = [...ids, ...nextIds];
-
-    console.log("allids", allIds);
-
-    const mySlides = allIds.map((id) => {
-      return (
-        <SwiperSlide className={id} key={id}>
-          <Slide id={id} key={id} />
-        </SwiperSlide>
-      );
-    });
-
-    setIds(allIds);
-    setSlides(mySlides);
-  };
-
-  useEffect(() => {
-    handlePaginate();
-  }, [paginate]);
-
-  const paginateSlider = () => {
-    const newIds = fillIds(SlidesPerPage, initalSlide);
-    const allIds = newIds;
-
-    const mySlides = allIds.map((id) => {
-      return (
-        <SwiperSlide className={id} key={id}>
-          <Slide id={id} key={id} />
-        </SwiperSlide>
-      );
-    });
-
-    setIds(allIds);
-    setSlides(mySlides);
-  };
-
-  const updateSlider = () => {
-    const nextIds = fillIds(SlidesPerPage, initalSlide + SlidesPerPage);
-
-    const prevSlides = maxPokemons - SlidesPerPage;
-    const prevIds = fillIds(SlidesPerPage, prevSlides);
-
-    const allIds = [...ids, ...nextIds];
-
-    const mySlides = allIds.map((id) => {
-      return (
-        <SwiperSlide className={id} key={id}>
-          <Slide id={id} key={id} />
-        </SwiperSlide>
-      );
-    });
-
-    setIds(allIds);
-    setSlides(mySlides);
-  };
-
+  const [mainSwiper, setMainSwiper] = useState<object>();
+  const [horizontalSwiper, setHorizontalSwiper] = useState();
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
 
   return (
     <Swiper
-      modules={[Navigation, Pagination, EffectFade, Controller, Thumbs]}
-      speed={800}
-      initialSlide={3}
+      modules={[Thumbs]}
+      speed={1500}
+      onSwiper={(swiper) => setMainSwiper(swiper)}
       direction={"vertical"}
       slidesPerView={1}
-      className="!h-screen MORTEN"
+      className="!h-screen"
       thumbs={{ swiper: thumbsSwiper }}
     >
-      {slides}
-
+      {ids.map((id) => {
+        return (
+          <SwiperSlide key={id}>
+            <Slide id={id} key={id} />
+          </SwiperSlide>
+        );
+      })}
+      ;
       <VerticalNavigation
-        allIds={ids}
+        horizontalSwiper={horizontalSwiper}
+        ids={ids}
         setThumbsSwiper={setThumbsSwiper}
-        setActiveBullet={setActiveBullet}
       />
-
-      <HorizontalPagination
-        setInitialSlide={setInitialSlide}
-        slidesPerPage={SlidesPerPage}
-        setActiveBullet={setActiveBullet}
-        handlePaginate={handlePaginate}
-        setPaginate={setPaginate}
-        activeSlide={activeSlide}
-      />
+      <SwiperContext.Provider value={activeBullet}>
+        <HorizontalPagination
+          horizontalSwiper={horizontalSwiper}
+          setHorizontalSwiper={setHorizontalSwiper}
+          setActiveBullet={setActiveBullet}
+          mainSwiper={mainSwiper}
+        />
+      </SwiperContext.Provider>
     </Swiper>
   );
 };

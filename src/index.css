@@ -59,6 +59,8 @@ body {
   width: 100%;
   z-index: 99;
   max-width: 800px;
+  display: flex;
+  margin: auto;
 }
 
 .horizontal-pagination .current-active {

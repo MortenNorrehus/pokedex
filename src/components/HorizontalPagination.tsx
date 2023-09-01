@@ -1,26 +1,39 @@
-import { useState, useEffect } from "react";
-import { ChevronLeft } from "react-feather";
+import { useState, useEffect, useContext } from "react";
+import { ChevronLeft, ChevronRight } from "react-feather";
 import { Controller, Navigation } from "swiper/modules";
-import { Swiper, SwiperSlide, useSwiper } from "swiper/react";
+import { Swiper, SwiperSlide, useSwiperSlide } from "swiper/react";
+import { controlHorizontalSlide, Divide } from "./SliderFunctions";
+import { SwiperContext } from "./Slider";
 
 export const HorizontalPagination = ({
-  setInitialSlide,
-  slidesPerPage,
   setActiveBullet,
-  handlePaginate,
-  setPaginate,
-  activeSlide,
+  mainSwiper,
+  horizontalSwiper,
+  setHorizontalSwiper,
 }) => {
-  const swiper = useSwiper();
+  const activeBullet = useContext(SwiperContext);
+
+  console.log("active", activeBullet);
+
+  const number = 10;
 
   useEffect(() => {
-    const keyDownHandler = (event) => {
-      if (event.key == "ArrowRight") {
-        swiper.slideNext();
-      }
-
-      if (event.key == "ArrowLeft") {
-        swiper.slidePrev();
+    const keyDownHandler = (event: KeyboardEvent) => {
+      switch (event.key) {
+        case "ArrowRight":
+          if (activeBullet < 140) {
+            controlHorizontalSlide(activeBullet + number, horizontalSwiper);
+            mainSwiper.slideTo(activeBullet + number, 3000);
+            setActiveBullet((prev: number) => prev + number);
+          }
+          break;
+        case "ArrowLeft":
+          if (activeBullet > 0) {
+            controlHorizontalSlide(activeBullet - number, horizontalSwiper);
+            mainSwiper.slideTo(activeBullet - number, 3000);
+            setActiveBullet((prev: number) => prev - number);
+          }
+          break;
       }
     };
 
@@ -29,56 +42,39 @@ export const HorizontalPagination = ({
     return () => {
       document.removeEventListener("keydown", keyDownHandler);
     };
-  }, []);
+  });
 
-  const divide = () => {
-    const number = 150;
-    const array = [];
-
-    for (let index = 1; index <= number; index++) {
-      if (index % 10 == 0) {
-        const item = `${index - 9} - ${index}`;
-
-        const obj = {
-          range: item,
-          start: index - 9,
-        };
-        array.push(obj);
-      }
-    }
-
-    return array;
-  };
-
-  const numbers = divide();
-
+  const swiperSlide = useSwiperSlide();
   return (
-    <>
+    <div className="horizontal-pagination">
       <button
         onClick={() => {
-          swiper.slidePrev();
-          setActiveBullet(swiper.activeIndex);
+          horizontalSwiper.slidePrev();
         }}
       >
         <ChevronLeft />
       </button>
       <Swiper
-        navigation
-        modules={[Controller, Navigation]}
+        modules={[Controller]}
         watchSlidesProgress
-        slidesPerView={8}
-        className="horizontal-pagination"
+        onSwiper={(swiper) => setHorizontalSwiper(swiper)}
+        onSlideChange={(swiper) => console.log(swiper)}
+        slidesPerView="auto"
+        spaceBetween={30}
       >
-        {numbers.map((number, index) => {
+        {Divide().map((number, index) => {
           return (
             <SwiperSlide
-              className={number.start == 1 ? "current-active" : ""}
+              className={
+                number.start == 1 && activeBullet == 0
+                  ? "current-active !w-auto"
+                  : "!w-auto"
+              }
               data-index={index}
               key={number.start}
               onClick={() => {
-                const slider = document.querySelector(".MORTEN").swiper;
-                slider.slideTo(number.start - 1, 2000);
-                activeSlide(index);
+                controlHorizontalSlide(number.start, horizontalSwiper);
+                mainSwiper.slideTo(number.start - 1, 3000);
               }}
             >
               {number.range}
@@ -86,6 +82,13 @@ export const HorizontalPagination = ({
           );
         })}
       </Swiper>
-    </>
+      <button
+        onClick={() => {
+          horizontalSwiper.slideNext();
+        }}
+      >
+        <ChevronRight />
+      </button>
+    </div>
   );
 };

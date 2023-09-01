@@ -1,32 +1,27 @@
 import { useSwiper, Swiper, SwiperSlide } from "swiper/react";
 import { ChevronUp, ChevronDown } from "react-feather";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { Thumbs } from "swiper/modules";
+import { controlHorizontalSlide } from "./SliderFunctions";
 
 export const VerticalNavigation = ({
-  allIds,
+  ids,
   setThumbsSwiper,
-  setActiveBullet,
+  horizontalSwiper,
 }) => {
   const swiper = useSwiper();
 
   useEffect(() => {
-    const keyDownHandler = (event) => {
-      if (event.key == "ArrowDown") {
-        swiper.slideNext();
-        setActiveBullet(swiper.activeIndex);
-
-        if (swiper.activeIndex == allIds.length - 1) {
-          setActiveBullet(swiper.activeIndex);
-        }
-      }
-
-      if (event.key == "ArrowUp") {
-        swiper.slidePrev();
-        setActiveBullet(swiper.activeIndex);
-        if (swiper.activeIndex == 0) {
-          setActiveBullet(0);
-        }
+    const keyDownHandler = (event: KeyboardEvent) => {
+      switch (event.key) {
+        case "ArrowDown":
+          swiper.slideNext();
+          controlHorizontalSlide(swiper.activeIndex, horizontalSwiper);
+          break;
+        case "ArrowUp":
+          swiper.slidePrev();
+          controlHorizontalSlide(swiper.activeIndex, horizontalSwiper);
+          break;
       }
     };
 
@@ -35,14 +30,13 @@ export const VerticalNavigation = ({
     return () => {
       document.removeEventListener("keydown", keyDownHandler);
     };
-  }, []);
+  });
 
   return (
     <div className="absolute top-1/2 right-10 z-10 transform -translate-x-1/2 -translate-y-1/2">
       <button
         onClick={() => {
           swiper.slidePrev();
-          setActiveBullet(swiper.activeIndex);
         }}
       >
         <ChevronUp />
@@ -58,14 +52,11 @@ export const VerticalNavigation = ({
         onSwiper={setThumbsSwiper}
         className="max-h-[300px]"
       >
-        {allIds.map((id: number, index: number) => {
+        {ids.map((id: number) => {
           return (
             <SwiperSlide
               key={id}
               className="h-full hover:text-white hover:text-xl transform transition-all duration-150 cursor-pointer"
-              onClick={() => {
-                setActiveBullet(index);
-              }}
             >
               {id}
             </SwiperSlide>
@@ -76,7 +67,6 @@ export const VerticalNavigation = ({
       <button
         onClick={() => {
           swiper.slideNext();
-          setActiveBullet(swiper.activeIndex);
         }}
       >
         <ChevronDown />

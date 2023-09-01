@@ -606,6 +606,10 @@ video {
   max-height: 300px;
 }
 
+.\!w-auto {
+  width: auto !important;
+}
+
 .w-40 {
   width: 10rem;
 }
@@ -788,6 +792,8 @@ body {
   width: 100%;
   z-index: 99;
   max-width: 800px;
+  display: flex;
+  margin: auto;
 }
 
 .horizontal-pagination .current-active {

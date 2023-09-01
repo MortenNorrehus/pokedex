@@ -7,47 +7,35 @@ export const fillIds = (SlidesPerPage: number, initalSlide: number) => {
   return array;
 };
 
-export const addButtons = (ids) => {
-  console.log("ids", ids);
-  const verticalSlider = document.querySelector(".vertical-pagination");
-  ids?.map((id) => {
-    const bullet = document.createElement("span");
-    const bulletNumber = document.createTextNode(id);
-    bullet.onclick = () => {
-      swiper.slideTo(2);
-    };
-    bullet.appendChild(bulletNumber);
-    verticalSlider?.append(bullet);
-  });
+export const controlHorizontalSlide = (
+  activeBullet: number,
+  horizontalSlider: object
+) => {
+  const range = Math.floor(activeBullet / 10);
 
-  const buttonNext = document.createElement("button");
-  const buttonPrev = document.createElement("button");
-  const next = document.createTextNode("Button Next");
-  const prev = document.createTextNode("Button Prev");
-
-  buttonNext.onclick = function () {
-    changePage(1);
-  };
-  buttonPrev.onclick = function () {
-    changePage(0);
-  };
-
-  buttonNext.appendChild(next);
-  buttonPrev.appendChild(prev);
-  verticalSlider?.append(buttonNext);
-  verticalSlider?.prepend(buttonPrev);
-};
-
-export const activeSlide = (range) => {
-  const horizontalSlider = document.querySelector(".horizontal-pagination");
-  console.log("changed");
-  console.log(horizontalSlider);
-
-  horizontalSlider?.querySelectorAll("[data-index]").forEach((item) => {
+  horizontalSlider.slides.forEach((item) => {
     item.classList.remove("current-active");
   });
 
-  horizontalSlider
-    ?.querySelector(`[data-index="${range}"]`)
-    ?.classList.add("current-active");
+  horizontalSlider.slides[range].classList.add("current-active");
+
+  horizontalSlider.slideNext();
+};
+
+export const Divide = () => {
+  const number = 150;
+  const array = [];
+
+  for (let index = 1; index <= number; index++) {
+    if (index % 10 == 0) {
+      const item = `${index - 9} - ${index}`;
+      const obj = {
+        range: item,
+        start: index - 9,
+      };
+      array.push(obj);
+    }
+  }
+
+  return array;
 };
