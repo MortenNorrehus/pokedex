@@ -1,4 +1,4 @@
-export const fillIds = (SlidesPerPage: number, initalSlide: number) => {
+export const fillIds = (initalSlide: number) => {
   const array = [];
 
   for (let index = initalSlide; index < 150; index++) {
@@ -7,19 +7,26 @@ export const fillIds = (SlidesPerPage: number, initalSlide: number) => {
   return array;
 };
 
+type Slider = {
+  slideNext(): unknown;
+  slides: HTMLElement[];
+};
+
 export const controlHorizontalSlide = (
   activeBullet: number,
-  horizontalSlider: object
+  horizontalSlider: Slider
 ) => {
   const range = Math.floor(activeBullet / 10);
 
-  horizontalSlider.slides.forEach((item) => {
+  horizontalSlider.slides.forEach((item: HTMLElement) => {
     item.classList.remove("current-active");
   });
 
   horizontalSlider.slides[range].classList.add("current-active");
 
-  horizontalSlider.slideNext();
+  if (range == 8) {
+    horizontalSlider.slideNext();
+  }
 };
 
 export const Divide = () => {
@@ -38,4 +45,16 @@ export const Divide = () => {
   }
 
   return array;
+};
+
+export const formatOrder = (id) => {
+  if (id < 10) {
+    id = "00" + id;
+    return id;
+  }
+  if (id < 100) {
+    id = "0" + id;
+    return id;
+  }
+  return id;
 };

@@ -7,13 +7,12 @@ import { HorizontalPagination } from "./HorizontalPagination";
 import { fillIds } from "./SliderFunctions";
 import { VerticalNavigation } from "./VerticalNavigation";
 
-const SlidesPerPage = 10;
 const initalSlide = 1;
 
 export const SwiperContext = createContext(0);
 
 export const Slider = () => {
-  const ids = fillIds(SlidesPerPage, initalSlide);
+  const ids = fillIds(initalSlide);
   const [activeBullet, setActiveBullet] = useState<number>(0);
 
   const [mainSwiper, setMainSwiper] = useState<object>();

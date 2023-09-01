@@ -12,6 +12,11 @@ body {
   font-weight: 300;
 }
 
+svg {
+  width: 100%;
+  height: 100%;
+}
+
 /**
 * SWIPER SLIDER
 */
@@ -48,12 +53,12 @@ body {
 .swiper-slide-thumb-active,
 .swiper-pagination-bullet:hover {
   color: #fff;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
 }
 
 .horizontal-pagination {
   position: absolute;
-  bottom: 0;
+  bottom: 30px;
   left: 0;
   right: 0;
   width: 100%;
@@ -61,6 +66,11 @@ body {
   max-width: 800px;
   display: flex;
   margin: auto;
+  align-items: center;
+}
+
+.horizontal-pagination .swiper-wrapper {
+  max-width: 750px;
 }
 
 .horizontal-pagination .current-active {

@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { fetchPokemon, fetchDescription } from "./fetchPokemon";
 import { bgColors, Names, kanjiColors } from "./Colors";
+import { formatOrder } from "./SliderFunctions";
 
 export const Slide = ({ id }) => {
   const result = useQuery(["pokemon", id], fetchPokemon);
@@ -25,22 +26,9 @@ export const Slide = ({ id }) => {
     return firstLetter + string.slice(1);
   };
 
-  const formatOrder = () => {
-    let id = result.data.id;
-    if (id < 10) {
-      id = "00" + id;
-      return id;
-    }
-    if (id < 100) {
-      id = "0" + id;
-      return id;
-    }
-    return id;
-  };
-
   const pokemon = {
     name: capitalize(result.data.name),
-    order: formatOrder(),
+    order: formatOrder(result.data.id),
     image: result.data.sprites.other["official-artwork"].front_default,
     description: getDescription(),
     color: bgColors[result.data.types[0].type.name],
@@ -62,9 +50,9 @@ export const Slide = ({ id }) => {
           </div>
         </div>
         <div className="flex top-0 left-0 w-full h-full text-white">
-          <div className="flex z-10 w-full m-auto relative pt-20">
+          <div className="flex z-10 w-full m-auto relative pt-20 flex-col lg:flex-row">
             <div
-              className="kanji top-0 left-0  text-black -z-10 absolute text-[14rem] font-kanji"
+              className="kanji top-[35%]  md:top-0 left-0 transform -translate-y-1/2 md:translate-x-0 text-black -z-10 absolute lg:text-[14rem] text-5xl font-kanji"
               style={{ color: pokemon.kanji }}
             >
               {Names[pokemon.name]}
@@ -72,7 +60,7 @@ export const Slide = ({ id }) => {
             <div className="flex-1 flex flex-col pb-32 justify-center">
               Højde Vægt
             </div>
-            <div className="flex-2">
+            <div className="lg:flex-2 lg:max-w-full flex-1 md:max-w-[300px] max-w-[200px] m-auto">
               <img className="w-full" src={pokemon.image} />
             </div>
             <div className="flex-1 justify-end flex flex-col pb-32">

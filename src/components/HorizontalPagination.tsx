@@ -1,7 +1,7 @@
-import { useState, useEffect, useContext } from "react";
+import { useEffect, useContext } from "react";
 import { ChevronLeft, ChevronRight } from "react-feather";
-import { Controller, Navigation } from "swiper/modules";
-import { Swiper, SwiperSlide, useSwiperSlide } from "swiper/react";
+import { Controller } from "swiper/modules";
+import { Swiper, SwiperSlide } from "swiper/react";
 import { controlHorizontalSlide, Divide } from "./SliderFunctions";
 import { SwiperContext } from "./Slider";
 
@@ -44,10 +44,10 @@ export const HorizontalPagination = ({
     };
   });
 
-  const swiperSlide = useSwiperSlide();
   return (
     <div className="horizontal-pagination">
       <button
+        className="text-slate-300 flex justify-center w-auto h-[35px]"
         onClick={() => {
           horizontalSwiper.slidePrev();
         }}
@@ -66,9 +66,8 @@ export const HorizontalPagination = ({
           return (
             <SwiperSlide
               className={
-                number.start == 1 && activeBullet == 0
-                  ? "current-active !w-auto"
-                  : "!w-auto"
+                "text-slate-400 hover:text-white hover:text-[1.2rem] transform transition-all duration-150 cursor-pointer !w-auto " +
+                (number.start == 1 && activeBullet == 0 ? "current-active" : "")
               }
               data-index={index}
               key={number.start}
@@ -83,6 +82,7 @@ export const HorizontalPagination = ({
         })}
       </Swiper>
       <button
+        className="text-slate-300 flex justify-center w-auto h-[35px]"
         onClick={() => {
           horizontalSwiper.slideNext();
         }}

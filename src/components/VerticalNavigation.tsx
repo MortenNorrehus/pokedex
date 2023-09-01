@@ -2,7 +2,7 @@ import { useSwiper, Swiper, SwiperSlide } from "swiper/react";
 import { ChevronUp, ChevronDown } from "react-feather";
 import { useEffect } from "react";
 import { Thumbs } from "swiper/modules";
-import { controlHorizontalSlide } from "./SliderFunctions";
+import { controlHorizontalSlide, formatOrder } from "./SliderFunctions";
 
 export const VerticalNavigation = ({
   ids,
@@ -10,7 +10,6 @@ export const VerticalNavigation = ({
   horizontalSwiper,
 }) => {
   const swiper = useSwiper();
-
   useEffect(() => {
     const keyDownHandler = (event: KeyboardEvent) => {
       switch (event.key) {
@@ -33,8 +32,9 @@ export const VerticalNavigation = ({
   });
 
   return (
-    <div className="absolute top-1/2 right-10 z-10 transform -translate-x-1/2 -translate-y-1/2">
+    <div className="absolute top-1/2 md:right-10 right-0 z-10 transform -translate-x-1/2 -translate-y-1/2">
       <button
+        className="text-slate-300 flex justify-center w-full h-[35px]"
         onClick={() => {
           swiper.slidePrev();
         }}
@@ -56,15 +56,16 @@ export const VerticalNavigation = ({
           return (
             <SwiperSlide
               key={id}
-              className="h-full hover:text-white hover:text-xl transform transition-all duration-150 cursor-pointer"
+              className="h-full text-slate-400 text-center hover:text-white hover:text-[1.2rem] transform transition-all duration-150 cursor-pointer"
             >
-              {id}
+              {formatOrder(id)}
             </SwiperSlide>
           );
         })}
       </Swiper>
 
       <button
+        className="text-slate-300 flex justify-center  w-full h-[35px]"
         onClick={() => {
           swiper.slideNext();
         }}
